@@ -22,7 +22,7 @@ stages:
 
 - stage: Deploy
   displayName: Deploy stage
-  dependsOn: Start
+  dependsOn: Build
   condition: succeeded()
   jobs:
   - deployment: Deploy
