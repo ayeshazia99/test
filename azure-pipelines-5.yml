@@ -10,9 +10,19 @@ variables:
   vmImageName: 'ubuntu-latest'
 
 stages:
+- stage: Start
+  displayName: Start
+  jobs:
+  - job: StartJob
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+    - script: echo Starting CD Pipeline
+      displayName: 'Start CD Pipeline'
+
 - stage: Deploy
   displayName: Deploy stage
-  dependsOn: Build
+  dependsOn: Start
   condition: succeeded()
   jobs:
   - deployment: Deploy
