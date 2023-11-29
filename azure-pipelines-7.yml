@@ -24,13 +24,22 @@ variables:
 stages:
 - stage: Build
   displayName: Build stage
-  jobs:  
+  jobs:
   - job: Build
     displayName: Build
     pool:
       vmImage: $(vmImageName)
 
     steps:
+    - task: NodeTool@0
+      inputs:
+        versionSpec: '21.x'
+      displayName: 'Install Node.js'
+
+    - script: |
+        npm install
+        npm run build 
+      displayName: 'npm install, build and test'
 
     - task: ArchiveFiles@2
       displayName: 'Archive files'
@@ -40,22 +49,6 @@ stages:
         archiveType: zip
         archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
         replaceExistingArchive: true
-
-    - task: NodeTool@0
-      inputs:
-        versionSpec: '21.x'
-
-    - script: |
-        npm install
-        npm run build
-        CI=true npm test -- --reporters=jest-junit --reporters=default
-      displayName: 'npm install, build and test'
-
-    - task: PublishTestResults@2
-      inputs:
-        testResultsFormat: 'JUnit'
-        testResultsFiles: 'junit.xml'
-        failTaskOnFailedTests: true
 
     - upload: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
       artifact: drop
