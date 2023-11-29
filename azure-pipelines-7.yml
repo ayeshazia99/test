@@ -80,6 +80,7 @@ stages:
               InlineScript: |
                 npm install
                 npm run build --if-present
+                timeoutInMinutes: 200
 
 - stage: DeployToProd
   displayName: Deploy to Prod stage
@@ -108,3 +109,4 @@ stages:
               InlineScript: |
                 npm install
                 npm run build --if-present
+                timeoutInMinutes: 200
